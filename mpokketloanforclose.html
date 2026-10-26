@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Settlement Payment Portal | mPokket - Collection Takedown</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- HTML5-QRCode Library for Camera Scanner -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mpokket: {
+                            blue: '#18509E',
+                            darkBlue: '#0D2B52',
+                            lightBlue: '#EBF3FB',
+                            orange: '#FF9800',
+                            orangeDark: '#E68A00',
+                            accent: '#38EF7D',
+                            navy: '#0A1B3A',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #F0F4F9 0%, #E2ECF8 100%);
+            min-height: 100vh;
+        }
+        .pulse-border {
+            box-shadow: 0 0 0 0 rgba(24, 80, 158, 0.4);
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(24, 80, 158, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(24, 80, 158, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(24, 80, 158, 0);
+            }
+        }
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #FF9800, transparent);
+            box-shadow: 0 0 8px #FF9800;
+            animation: scan 2.5s infinite linear;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-12">
+
+    <!-- Header Navigation Bar -->
+    <header class="bg-mpokket-blue text-white shadow-lg sticky top-0 z-40 border-b border-blue-800">
+        <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <!-- mPokket Logo Icon -->
+                <div class="bg-white p-1.5 rounded-lg shadow-inner flex items-center justify-center w-9 h-9">
+                    <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 75V40C20 30 28 22 38 22C48 22 54 28 54 38V75" stroke="#18509E" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M54 75V40C54 30 62 22 72 22C82 22 88 28 88 38V75" stroke="#18509E" stroke-width="14" stroke-linecap="round"/>
+                        <circle cx="68" cy="14" r="8" fill="#FF9800"/>
+                        <circle cx="84" cy="22" r="5" fill="#FF9800"/>
+                    </svg>
+                </div>
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight leading-none block">mPokket</span>
+                    <span class="text-[10px] text-blue-200 tracking-wider uppercase font-semibold block mt-0.5">Collection Takedown</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center bg-blue-900/60 backdrop-blur px-2.5 py-1 rounded-full border border-blue-400/30 text-xs text-blue-100">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-1.5"></span>
+                <span class="font-medium text-[11px]">Official Portal</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container Card -->
+    <main class="max-w-md mx-auto px-4 pt-4 space-y-4">
+
+        <!-- Banner Card -->
+        <div class="bg-gradient-to-r from-mpokket-darkBlue to-mpokket-blue text-white rounded-2xl p-4 shadow-md relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex justify-between items-start">
+                <div>
+                    <span class="inline-block text-[10px] uppercase font-extrabold tracking-wider bg-mpokket-orange text-white px-2 py-0.5 rounded-md mb-1.5 shadow-sm">
+                        Loan Settlement Payment
+                    </span>
+                    <h1 class="text-lg font-bold text-white">Loan Foreclosure Portal</h1>
+                    <p class="text-xs text-blue-100 mt-0.5">Enter custom settlement amount to proceed</p>
+                </div>
+                <div class="text-right">
+                    <i class="fa-solid fa-file-invoice-dollar text-2xl text-amber-300 opacity-90"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Payment Amount Input Section -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-4">
+            <div>
+                <label for="customAmount" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                    Enter Amount to Pay (₹)
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-mpokket-blue font-extrabold text-xl">
+                        ₹
+                    </div>
+                    <input 
+                        type="number" 
+                        id="customAmount" 
+                        placeholder="e.g. 10000"
+                        min="1"
+                        step="any"
+                        oninput="updatePaymentLinks()"
+                        class="w-full pl-9 pr-4 py-3.5 bg-slate-50 border-2 border-mpokket-blue/40 focus:border-mpokket-blue rounded-xl font-black text-slate-900 text-2xl outline-none shadow-inner transition"
+                    />
+                </div>
+                <p class="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-info text-mpokket-blue"></i>
+                    Type your agreed settlement amount to auto-configure UPI deep links.
+                </p>
+            </div>
+
+            <!-- Quick Amount Selector Chips -->
+            <div class="pt-1">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2">Quick Amounts:</span>
+                <div class="grid grid-cols-4 gap-1.5">
+                    <button onclick="setQuickAmount(5000)" class="py-1.5 px-2 bg-slate-100 hover:bg-mpokket-lightBlue hover:text-mpokket-blue text-slate-700 font-bold rounded-lg text-xs border border-slate-200 transition">₹5,000</button>
+                    <button onclick="setQuickAmount(10000)" class="py-1.5 px-2 bg-slate-100 hover:bg-mpokket-lightBlue hover:text-mpokket-blue text-slate-700 font-bold rounded-lg text-xs border border-slate-200 transition">₹10,000</button>
+                    <button onclick="setQuickAmount(15000)" class="py-1.5 px-2 bg-slate-100 hover:bg-mpokket-lightBlue hover:text-mpokket-blue text-slate-700 font-bold rounded-lg text-xs border border-slate-200 transition">₹15,000</button>
+                    <button onclick="setQuickAmount(20000)" class="py-1.5 px-2 bg-slate-100 hover:bg-mpokket-lightBlue hover:text-mpokket-blue text-slate-700 font-bold rounded-lg text-xs border border-slate-200 transition">₹20,000</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin & HR Authorization Section -->
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-2xl p-4 border border-amber-200/70 shadow-sm relative overflow-hidden">
+            <div class="flex items-start space-x-3">
+                <div class="w-10 h-10 rounded-full bg-mpokket-blue text-white flex items-center justify-center font-bold text-base shadow-md flex-shrink-0">
+                    TN
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-slate-800 text-sm">TEENU</h2>
+                        <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-shield-check"></i> VERIFIED HR
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-600 font-medium">TEENU (HR mPokket Team)</p>
+                    
+                    <div class="mt-2 pt-2 border-t border-amber-200/60 flex items-center text-xs font-semibold text-amber-900">
+                        <i class="fa-solid fa-user-check text-mpokket-orange mr-1.5 text-sm"></i>
+                        <span>Amount collected by TEENU HR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Scan & Download Section -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 text-center space-y-4">
+            <div>
+                <h3 class="font-bold text-slate-800 text-sm">Scan QR Code to Pay</h3>
+                <p class="text-xs text-slate-500">Scan using Google Pay, PhonePe, Paytm, or BHIM</p>
+            </div>
+
+            <!-- QR Container Card -->
+            <div class="relative inline-block p-3 bg-white rounded-2xl border-2 border-mpokket-blue/20 shadow-md pulse-border">
+                <div class="scan-line"></div>
+                <div class="bg-white p-2 rounded-xl flex justify-center items-center">
+                    <img 
+                        id="qrCodeImage"
+                        src="Picsart_26-10-24_18-11-53-437_63e16e.png" 
+                        onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'240\' height=\'240\' viewBox=\'0 0 240 240\'><rect width=\'240\' height=\'240\' fill=\'%23ffffff\'/><path d=\'M20 20h60v60H20zM160 20h60v60h-60zM20 160h60v60H20z\' fill=\'%23000\'/><path d=\'M30 30h40v40H30zM170 30h40v40h-40zM30 170h40v40H30z\' fill=\'%23fff\'/><path d=\'M40 40h20v20H40zM180 40h20v20h-20zM40 180h20v20H40z\' fill=\'%23000\'/><path d=\'M90 20h10v20H90zM110 20h30v10h-30zM100 40h20v30h-20zM140 40h10v30h-10zM90 80h60v10H90zM20 90h20v20H20zM50 90h30v10H50zM100 90h20v20h-20zM130 90h30v10h-30zM170 90h20v10h-20zM200 90h20v30h-20zM60 110h20v20H60zM90 120h30v20H90zM140 110h20v30h-20zM170 120h40v10h-40zM20 130h30v10H20zM110 150h30v10h-30zM160 140h30v20h-30zM200 150h20v20h-20zM90 170h20v20H90zM120 170h40v10h-40zM170 180h20v40h-20zM200 180h20v10h-20zM100 200h30v20h-30zM140 200h20v20h-20z\' fill=\'%23000\'/><circle cx=\'120\' cy=\'120\' r=\'28\' fill=\'%23ffffff\' stroke=\'%2318509E\' stroke-width=\'3\'/><text x=\'120\' y=\'125\' font-family=\'sans-serif\' font-size=\'16\' font-weight=\'bold\' fill=\'%2318509E\' text-anchor=\'middle\'>m</text><circle cx=\'128\' cy=\'110\' r=\'3.5\' fill=\'%23FF9800\'/></svg>';"
+                        alt="mPokket Settlement QR Code" 
+                        class="w-56 h-56 object-contain rounded-lg border border-slate-100"
+                    />
+                </div>
+                <div class="mt-1 flex items-center justify-center text-[11px] font-bold text-mpokket-blue">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Verified mPokket Merchant QR
+                </div>
+            </div>
+
+            <!-- Action Buttons: Download & Camera Scanner -->
+            <div class="grid grid-cols-2 gap-2">
+                <button 
+                    onclick="downloadQR()" 
+                    class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition flex items-center justify-center space-x-1.5 border border-slate-300 shadow-sm active:scale-[0.99]"
+                >
+                    <i class="fa-solid fa-download text-mpokket-blue"></i>
+                    <span>Save to Gallery</span>
+                </button>
+
+                <button 
+                    onclick="openScannerModal()" 
+                    class="py-2.5 px-3 bg-mpokket-blue hover:bg-blue-900 text-white font-semibold rounded-xl text-xs transition flex items-center justify-center space-x-1.5 shadow-sm active:scale-[0.99]"
+                >
+                    <i class="fa-solid fa-camera text-amber-300"></i>
+                    <span>Scan with Camera</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Direct One-Click UPI Buttons -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 text-sm">Direct One-Click Pay</h3>
+                <span id="amountBadge" class="text-[10px] bg-blue-100 text-mpokket-blue font-bold px-2 py-0.5 rounded-md">Amount: ₹0</span>
+            </div>
+
+            <p class="text-xs text-slate-500">Select your preferred UPI app to open payment directly:</p>
+
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <!-- Google Pay -->
+                <a 
+                    id="gpayLink"
+                    href="upi://pay?pa=70678522@ibl&pn=mPokket%20Settlement&am=0&cu=INR&tn=Loan%20Settlement"
+                    class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition shadow-sm group active:scale-[0.98]"
+                >
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mr-2.5 group-hover:bg-white border border-slate-200">
+                        <i class="fa-brands fa-google text-blue-600 font-bold"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-xs text-slate-800">Google Pay</span>
+                        <span class="block text-[10px] text-slate-400">Instant UPI</span>
+                    </div>
+                </a>
+
+                <!-- PhonePe -->
+                <a 
+                    id="phonepeLink"
+                    href="phonepe://pay?pa=70678522@ibl&pn=mPokket%20Settlement&am=0&cu=INR&tn=Loan%20Settlement"
+                    class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-purple-500 hover:bg-purple-50/50 transition shadow-sm group active:scale-[0.98]"
+                >
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mr-2.5 group-hover:bg-white border border-slate-200">
+                        <i class="fa-solid fa-mobile-screen-button text-purple-600 font-bold"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-xs text-slate-800">PhonePe</span>
+                        <span class="block text-[10px] text-slate-400">Instant UPI</span>
+                    </div>
+                </a>
+
+                <!-- Paytm -->
+                <a 
+                    id="paytmLink"
+                    href="paytmmp://pay?pa=70678522@ibl&pn=mPokket%20Settlement&am=0&cu=INR&tn=Loan%20Settlement"
+                    class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-cyan-500 hover:bg-cyan-50/50 transition shadow-sm group active:scale-[0.98]"
+                >
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mr-2.5 group-hover:bg-white border border-slate-200">
+                        <i class="fa-solid fa-wallet text-cyan-600 font-bold"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-xs text-slate-800">Paytm</span>
+                        <span class="block text-[10px] text-slate-400">Instant UPI</span>
+                    </div>
+                </a>
+
+                <!-- BHIM / Any UPI -->
+                <a 
+                    id="bhimLink"
+                    href="upi://pay?pa=70678522@ibl&pn=mPokket%20Settlement&am=0&cu=INR&tn=Loan%20Settlement"
+                    class="flex items-center p-3 rounded-xl border border-slate-200 hover:border-orange-500 hover:bg-orange-50/50 transition shadow-sm group active:scale-[0.98]"
+                >
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mr-2.5 group-hover:bg-white border border-slate-200">
+                        <i class="fa-solid fa-qrcode text-amber-600 font-bold"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-xs text-slate-800">BHIM / Any UPI</span>
+                        <span class="block text-[10px] text-slate-400">All UPI Apps</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Copy VPA / UPI ID Option -->
+            <div class="pt-2">
+                <button 
+                    onclick="copyUPI()" 
+                    class="w-full py-3 bg-mpokket-darkBlue hover:bg-blue-950 text-white font-bold rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-md active:scale-[0.99]"
+                >
+                    <i class="fa-regular fa-copy text-amber-400"></i>
+                    <span>Copy Official UPI VPA (70678522@ibl)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirm Payment Action Button -->
+        <div class="pt-1">
+            <button 
+                onclick="openConfirmationModal()" 
+                class="w-full py-4 bg-gradient-to-r from-mpokket-blue to-mpokket-darkBlue text-white font-extrabold rounded-2xl text-sm shadow-xl hover:shadow-2xl transition flex items-center justify-center space-x-2 active:scale-[0.99] border border-blue-400/30"
+            >
+                <i class="fa-solid fa-lock text-emerald-400"></i>
+                <span id="btnPayText">PROCEED TO PAY & GENERATE NOC</span>
+            </button>
+        </div>
+
+        <!-- Trust & Security Badges -->
+        <div class="bg-white/80 backdrop-blur rounded-2xl p-4 border border-slate-200/60 shadow-sm text-center space-y-3">
+            <div class="flex items-center justify-center space-x-6 text-slate-500">
+                <div class="flex items-center space-x-1.5">
+                    <i class="fa-solid fa-shield-halved text-emerald-600 text-sm"></i>
+                    <span class="text-[11px] font-semibold">256-Bit SSL Secured</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <i class="fa-solid fa-building-columns text-mpokket-blue text-sm"></i>
+                    <span class="text-[11px] font-semibold">RBI Regulated NBFC</span>
+                </div>
+            </div>
+            <p class="text-[10px] text-slate-400 leading-relaxed">
+                mPokket Financial Services Private Limited. Upon successful receipt of settlement amount, your loan foreclosure certificate & No Objection Certificate (NOC) will be issued within 24 working hours.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2 border border-slate-700">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+        <span id="toastMessage">UPI ID copied to clipboard!</span>
+    </div>
+
+    <!-- Live Camera Scanner Modal -->
+    <div id="scannerModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center px-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-qrcode text-mpokket-blue text-lg"></i>
+                    <h3 class="font-bold text-slate-800 text-sm">Camera QR Scanner</h3>
+                </div>
+                <button onclick="closeScannerModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="relative bg-slate-900 rounded-2xl overflow-hidden min-h-[250px] flex items-center justify-center">
+                <div id="reader" class="w-full"></div>
+            </div>
+
+            <div id="scannerResult" class="hidden bg-emerald-50 text-emerald-800 p-3 rounded-xl text-xs font-semibold text-left border border-emerald-200">
+                <p class="font-bold">QR Detected:</p>
+                <p id="scannedText" class="break-all font-mono text-[11px] mt-0.5 text-emerald-900"></p>
+            </div>
+
+            <button 
+                onclick="closeScannerModal()" 
+                class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition"
+            >
+                Close Scanner
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation / NOC Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center px-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4 animate-in fade-in zoom-in duration-200">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-file-contract"></i>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-slate-800 text-lg">Settlement Pre-Authorization</h3>
+                <p class="text-xs text-slate-500 mt-1">Confirming payment of <span id="modalAmountDisplay" class="font-bold text-slate-800">₹0</span></p>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-left text-xs space-y-1.5 font-medium text-slate-600">
+                <div class="flex justify-between">
+                    <span>HR Agent:</span>
+                    <span class="font-bold text-slate-800">TEENU</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Settlement Status:</span>
+                    <span class="font-bold text-emerald-600">APPROVED</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>NOC Dispatch:</span>
+                    <span class="font-bold text-slate-800">Instant via Email / SMS</span>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2">
+                <a 
+                    id="modalProceedBtn"
+                    href="upi://pay?pa=70678522@ibl&pn=mPokket%20Settlement&am=0&cu=INR&tn=Loan%20Settlement"
+                    class="w-full py-3 bg-mpokket-blue hover:bg-blue-900 text-white font-bold rounded-xl text-xs transition block shadow-lg"
+                >
+                    Proceed to Payment
+                </a>
+                <button 
+                    onclick="closeConfirmationModal()" 
+                    class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl text-xs transition"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        let html5QrCode = null;
+
+        // Dynamic Link Updater based on custom typed amount
+        function updatePaymentLinks() {
+            const rawVal = document.getElementById('customAmount').value;
+            const amount = parseFloat(rawVal) || 0;
+            const formattedAmt = amount > 0 ? amount.toLocaleString('en-IN') : '0';
+            
+            // Update badge & buttons
+            document.getElementById('amountBadge').textContent = `Amount: ₹${formattedAmt}`;
+            document.getElementById('btnPayText').textContent = amount > 0 
+                ? `PAY ₹${formattedAmt} NOW & GENERATE NOC` 
+                : 'PROCEED TO PAY & GENERATE NOC';
+
+            const vpa = "70678522@ibl";
+            const name = "mPokket Settlement";
+            const note = "Loan Settlement";
+
+            const upiUrl = `upi://pay?pa=${vpa}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+            const gpayUrl = upiUrl;
+            const phonepeUrl = `phonepe://pay?pa=${vpa}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+            const paytmUrl = `paytmmp://pay?pa=${vpa}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+
+            document.getElementById('gpayLink').href = gpayUrl;
+            document.getElementById('phonepeLink').href = phonepeUrl;
+            document.getElementById('paytmLink').href = paytmUrl;
+            document.getElementById('bhimLink').href = upiUrl;
+            document.getElementById('modalProceedBtn').href = upiUrl;
+            document.getElementById('modalAmountDisplay').textContent = `₹${formattedAmt}`;
+        }
+
+        // Quick Selector Helper
+        function setQuickAmount(val) {
+            document.getElementById('customAmount').value = val;
+            updatePaymentLinks();
+        }
+
+        // Function to copy UPI ID
+        function copyUPI() {
+            const upiId = "70678522@ibl";
+            
+            const tempInput = document.createElement("textarea");
+            tempInput.value = upiId;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast("UPI ID (70678522@ibl) copied!");
+        }
+
+        // Download QR Function
+        function downloadQR() {
+            const qrImg = document.getElementById('qrCodeImage');
+            const link = document.createElement('a');
+            link.href = qrImg.src;
+            link.download = 'mPokket_Settlement_QR.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast("QR Code download started!");
+        }
+
+        // Live Camera Scanner Functions
+        function openScannerModal() {
+            document.getElementById('scannerModal').classList.remove('hidden');
+            document.getElementById('scannerResult').classList.add('hidden');
+            
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+
+            const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+            html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanFailure)
+                .catch(err => {
+                    console.error("Camera access failed", err);
+                    showToast("Camera permission required to scan.");
+                });
+        }
+
+        function onScanSuccess(decodedText) {
+            document.getElementById('scannedText').textContent = decodedText;
+            document.getElementById('scannerResult').classList.remove('hidden');
+            showToast("QR Code Scanned Successfully!");
+
+            if (decodedText.startsWith("upi://")) {
+                setTimeout(() => {
+                    window.location.href = decodedText;
+                }, 1200);
+            }
+        }
+
+        function onScanFailure(error) {
+            // Quietly ignore frame scan errors
+        }
+
+        function closeScannerModal() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('scannerModal').classList.add('hidden');
+                }).catch(err => {
+                    document.getElementById('scannerModal').classList.add('hidden');
+                });
+            } else {
+                document.getElementById('scannerModal').classList.add('hidden');
+            }
+        }
+
+        // Show Toast Function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Modal Controls
+        function openConfirmationModal() {
+            const rawVal = document.getElementById('customAmount').value;
+            const amount = parseFloat(rawVal) || 0;
+            if (amount <= 0) {
+                showToast("Kripya payment amount enter karein!");
+                document.getElementById('customAmount').focus();
+                return;
+            }
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            updatePaymentLinks();
+        }
+    </script>
+</body>
+</html>
